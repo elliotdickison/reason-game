@@ -19,6 +19,20 @@ let scaleVector = (s: float, v: vector) => {
   (x *. s, y *. s)
 };
 
+let getRectangleDimensions = (r: rectangle) => {
+  let (bottomLeft, topRight) = r;
+  addVectors(topRight, scaleVector(-1.0, bottomLeft))
+};
+
+let shrinkRectangle = (s: float, r: rectangle) => {
+  let (bottomLeft, topRight) = r;
+  let shrinkVector = (s, s);
+  (
+    addVectors(bottomLeft, shrinkVector),
+    addVectors(topRight, scaleVector(-1.0, shrinkVector))
+  )
+};
+
 /* f == m * a == m * ((vi - vt) / dt) */
 let stepDynamicBody = (delta: float, force: vector, body: dynamicBody) => {
   let (pxInitial, pyInitial) = body.position;
