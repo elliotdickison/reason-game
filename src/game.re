@@ -1,8 +1,8 @@
-type ship = Physics.dynamicBody;
+type ship = Body.body;
 
 type camera = {
-  resolution: Physics.vector,
-  focus: Physics.vector,
+  resolution: (float, float),
+  focus: Vector.vector,
 };
 
 type state = {
@@ -27,11 +27,11 @@ let initial = {
 
 let getCameraRectangle = (camera: camera) =>
   (
-    Physics.addVectors(camera.focus, Physics.scaleVector(-0.5, camera.resolution)),
-    Physics.addVectors(camera.focus, Physics.scaleVector(0.5, camera.resolution))
+    Vector.add(camera.focus, Vector.scale(-0.5, camera.resolution)),
+    Vector.add(camera.focus, Vector.scale(0.5, camera.resolution))
   );
 
-let stepShip = (delta: float, input: Input.state, bounds: Physics.rectangle, ship: ship) => {
+let stepShip = (delta: float, input: Input.state, bounds: Rectangle.rectangle, ship: ship) => {
   let xForce = switch input.steer {
     | Left => -2.0
     | Right => 2.0
@@ -42,7 +42,7 @@ let stepShip = (delta: float, input: Input.state, bounds: Physics.rectangle, shi
     | Reverse => -2.0
     | Neutral => 0.0
   };
-  Physics.stepDynamicBodyInBounds(delta, (xForce, yForce), bounds, ship)
+  Body.moveInBounds(delta, (xForce, yForce), bounds, ship)
 };
 
 let stepCamera = (delta: float, camera: camera) => {
@@ -55,7 +55,7 @@ let stepCamera = (delta: float, camera: camera) => {
 
 let step = (delta: float, keys: list(Input.key), state: state) => {
   let input = Input.step(keys, state.input);
-  let cameraBounds = Physics.shrinkRectangle(50.0, getCameraRectangle(state.camera));
+  let cameraBounds = Rectangle.shrink(50.0, getCameraRectangle(state.camera));
   let ship = stepShip(delta, input, cameraBounds, state.ship);
   let camera = stepCamera(delta, state.camera);
   {

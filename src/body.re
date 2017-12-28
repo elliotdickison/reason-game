@@ -1,40 +1,12 @@
-type vector = (float, float);
-type rectangle = (vector, vector);
-
-type dynamicBody = {
+type body = {
   mass: float,
   drag: float,
-  velocity: vector,
-  position: vector,
-};
-
-let addVectors = (a: vector, b: vector) => {
-  let (aX, aY) = a;
-  let (bX, bY) = b;
-  (aX +. bX, aY +. bY)
-};
-
-let scaleVector = (s: float, v: vector) => {
-  let (x, y) = v;
-  (x *. s, y *. s)
-};
-
-let getRectangleDimensions = (r: rectangle) => {
-  let (bottomLeft, topRight) = r;
-  addVectors(topRight, scaleVector(-1.0, bottomLeft))
-};
-
-let shrinkRectangle = (s: float, r: rectangle) => {
-  let (bottomLeft, topRight) = r;
-  let shrinkVector = (s, s);
-  (
-    addVectors(bottomLeft, shrinkVector),
-    addVectors(topRight, scaleVector(-1.0, shrinkVector))
-  )
+  velocity: Vector.vector,
+  position: Vector.vector,
 };
 
 /* f == m * a == m * ((vi - vt) / dt) */
-let stepDynamicBody = (delta: float, force: vector, body: dynamicBody) => {
+let move = (delta: float, force: Vector.vector, body: body) => {
   let (pxInitial, pyInitial) = body.position;
   let (vxInitial, vyInitial) = body.velocity;
   let (fx, fy) = force;
@@ -49,7 +21,7 @@ let stepDynamicBody = (delta: float, force: vector, body: dynamicBody) => {
   }
 };
 
-let stepDynamicBodyInBounds = (delta: float, force: vector, bounds: rectangle, body: dynamicBody) => {
+let moveInBounds = (delta: float, force: Vector.vector, bounds: Rectangle.rectangle, body: body) => {
   let (fxInitial, fyInitial) = force;
   let (px, py) = body.position;
   let ((minX, minY), (maxX, maxY)) = bounds;
@@ -67,5 +39,5 @@ let stepDynamicBodyInBounds = (delta: float, force: vector, bounds: rectangle, b
   } else {
     fyInitial
   };
-  stepDynamicBody(delta, (fxFinal, fyFinal), body)
+  move(delta, (fxFinal, fyFinal), body)
 }
