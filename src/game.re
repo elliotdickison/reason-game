@@ -1,8 +1,12 @@
 type ship = Body.body;
-type missile = Body.body;
+type missile = {
+  age : float,
+  rate: float,
+  body : Body.body
+};
 
 type camera = {
-  resolution: (float, float),
+  resolution: Vector.vector,
   focus: Vector.vector,
 };
 
@@ -13,20 +17,26 @@ type state = {
   missiles: list(missile)
 };
 
-let initial = {
+let initial = (cameraResolution: Vector.vector) => {
   input: Input.initial,
   camera: {
-    resolution: (600.0, 600.0),
-    focus: (300.0, 60.0)
+    resolution: cameraResolution,
+    focus: Vector.scale(0.5, cameraResolution)
   },
   ship: {
     mass: 110.0,
     drag: 0.04,
     velocity: (0.0, 0.0),
-    position: (300.0, 60.0)
+    position: Vector.scale(0.5, cameraResolution)
   },
   missiles: []
 };
+
+let canFireMissile = (missiles: list(missile)) =>
+  switch missiles {
+  | [] => true
+  | [missile, ..._] => missile.age >= missile.rate
+  };
 
 let getCameraRectangle = (camera: camera) =>
   (
@@ -56,22 +66,36 @@ let stepCamera = (delta: float, camera: camera) => {
   }
 };
 
+let stepMissile = (delta : float, missile : missile) : missile => {
+  ...missile,
+  age: missile.age +. delta,
+  body: Body.step(delta, (0.0, 0.00), missile.body)
+};
+
 let stepMissiles = (delta: float, input: Input.state, state: state): list(missile) => {
-  let missiles = if (input.fire) {
-    let (_, velocityY) = state.ship.velocity;
-    let missile: missile = {
+  /* Add a new missile if input.fire is true and no missiles have been fired for
+  `rate` ms */
+  let missiles = if (input.fire && canFireMissile(state.missiles)) {
+    let missileBody: Body.body = {
       mass: 1.0,
       drag: 0.0,
-      velocity: (0.0, 12.0),
+      velocity: (0.0, 10.0),
       position: state.ship.position
+    };
+    let missile: missile = {
+      age: 0.0,
+      rate: 100.0,
+      body: missileBody
     };
     [missile, ...state.missiles]
   } else {
     state.missiles
   };
-  let steppedMissiles = List.map(Body.step(delta, (0.0, 0.00)), missiles);
+  /* Step each missile (update age and position) */
+  let steppedMissiles = List.map(stepMissile(delta), missiles);
+  /* Filter out missiles that have moved offscreen */
   List.filter((missile: missile) => {
-    let (_, missilePositionY) = missile.position;
+    let (_, missilePositionY) = missile.body.position;
     let (_, (_, cameraMaxY)) = getCameraRectangle(state.camera);
     missilePositionY <= cameraMaxY
   }, steppedMissiles)

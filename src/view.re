@@ -13,9 +13,9 @@ let make = (~data: Game.state, _children) => {
       viewportWidth,
       viewportHeight
     );
-    let globalTransform = Printf.sprintf("translate(0, %f) scale(1, -1)", viewportWidth);
+    let globalTransform = Printf.sprintf("translate(0, %f) scale(1, -1)", viewportHeight);
     let missiles = List.map((missile: Game.missile) => {
-      let ( positionX, positionY ) = missile.position;
+      let ( positionX, positionY ) = missile.body.position;
       <circle
         cx=Printf.sprintf("%f", positionX)
         cy=Printf.sprintf("%f", positionY)

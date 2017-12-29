@@ -53,7 +53,7 @@ let stepThrust = (keys: list(key)) => {
 
 let stepFire = (keys: list(key)) => {
   let space = getKeyDuration(keys, " ");
-  space === 0.0
+  space >= 0.0
 };
 
 let step = (keys: list(key), state: state) => {

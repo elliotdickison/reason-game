@@ -3,11 +3,8 @@
 type element;
 
 module Element {
-  [@bs.get] external getWidth : element => int = "innerWidth";
-  [@bs.get] external getHeight : element => int = "innerHeight";
-
-  [@bs.set] external setWidth : element => int => unit = "width";
-  [@bs.set] external setHeight : element => int => unit = "height";
+  [@bs.get] external getWidth : element => float = "innerWidth";
+  [@bs.get] external getHeight : element => float = "innerHeight";
 };
 
 /* Event */
@@ -31,3 +28,4 @@ module Event {
 [@bs.val] external requestAnimationFrame : (float => unit) => unit = "requestAnimationFrame";
 
 [@bs.val] external root : element = "document";
+[@bs.val] external window : element = "window";

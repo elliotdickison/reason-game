@@ -23,19 +23,19 @@ let step = (delta: float, force: Vector.vector, body: body) => {
 
 let stepInBounds = (delta: float, force: Vector.vector, bounds: Rectangle.rectangle, body: body) => {
   let (fxInitial, fyInitial) = force;
-  let (px, py) = body.position;
+  let (x, y) = body.position;
   let ((minX, minY), (maxX, maxY)) = bounds;
-  let fxFinal = if (px < minX) {
-    fxInitial +. (0.1 *. (minX -. px))
-  } else if (px > maxX) {
-    fxInitial +. (0.1 *. (maxX -. px))
+  let fxFinal = if (x < minX) {
+    fxInitial +. (0.1 *. (minX -. x))
+  } else if (x > maxX) {
+    fxInitial +. (0.1 *. (maxX -. x))
   } else {
     fxInitial
   };
-  let fyFinal = if (py < minY) {
-    fyInitial +. (0.1 *. (minY -. py))
-  } else if (py > maxY) {
-    fyInitial +. (0.1 *. (maxY -. py))
+  let fyFinal = if (y < minY) {
+    fyInitial +. (0.1 *. (minY -. y))
+  } else if (y > maxY) {
+    fyInitial +. (0.1 *. (maxY -. y))
   } else {
     fyInitial
   };

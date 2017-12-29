@@ -21,7 +21,10 @@ let make = (_children) => {
     timestamp: 0.0,
     delta: 0.0,
     keys: [],
-    game: Game.initial
+    game: Game.initial((
+      Document.Element.getWidth(Document.window),
+      Document.Element.getHeight(Document.window)
+    ))
   },
   reducer: (action, state) => {
     switch action {
@@ -62,14 +65,8 @@ let make = (_children) => {
   },
   didUpdate: ({ newSelf }) => Document.requestAnimationFrame(newSelf.reduce((timestamp) => Step(timestamp))),
   shouldUpdate: ({ oldSelf, newSelf }) => oldSelf.state.frame != newSelf.state.frame,
-  render: (self) => {
-    let (_, vy) = self.state.game.ship.velocity;
-    <div>
+  render: (self) =>
+    <div style=(ReactDOMRe.Style.make(~position="fixed", ~top="0", ~left="0", ~width="100vw", ~height="100vh", ()))>
       <View data={self.state.game} />
-      (ReasonReact.stringToElement("Framerate: " ++ string_of_float(1000.0 /. self.state.delta)))
-      (ReasonReact.stringToElement("Velocity: " ++ string_of_float(vy)))
-      (ReasonReact.stringToElement("Missiles: " ++ string_of_int(List.length(self.state.game.missiles))))
-      (ReasonReact.stringToElement("Keys: " ++ String.concat(" : ", List.map(((name, duration)) => name ++ " " ++ string_of_float(duration), self.state.keys))))
     </div>
-  }
 };
