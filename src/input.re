@@ -51,10 +51,13 @@ let stepThrust = (keys: list(key)) => {
   }
 };
 
+let stepFire = (keys: list(key)) => {
+  let space = getKeyDuration(keys, " ");
+  space === 0.0
+};
+
 let step = (keys: list(key), state: state) => {
-  {
-    ...state,
-    steer: stepSteer(keys),
-    thrust: stepThrust(keys)
-  }
+  steer: stepSteer(keys),
+  thrust: stepThrust(keys),
+  fire: stepFire(keys)
 }

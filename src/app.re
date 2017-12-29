@@ -68,6 +68,7 @@ let make = (_children) => {
       <View data={self.state.game} />
       (ReasonReact.stringToElement("Framerate: " ++ string_of_float(1000.0 /. self.state.delta)))
       (ReasonReact.stringToElement("Velocity: " ++ string_of_float(vy)))
+      (ReasonReact.stringToElement("Missiles: " ++ string_of_int(List.length(self.state.game.missiles))))
       (ReasonReact.stringToElement("Keys: " ++ String.concat(" : ", List.map(((name, duration)) => name ++ " " ++ string_of_float(duration), self.state.keys))))
     </div>
   }
