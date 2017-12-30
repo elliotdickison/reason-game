@@ -3,7 +3,7 @@ type state = {
   timestamp: float,
   delta: float,
   keys: list(Input.key),
-  game: Game.state,
+  data: Data.state,
 };
 
 type action =
@@ -21,7 +21,7 @@ let make = (_children) => {
     timestamp: 0.0,
     delta: 0.0,
     keys: [],
-    game: Game.initial((
+    data: Data.initial((
       Document.Element.getWidth(Document.window),
       Document.Element.getHeight(Document.window)
     ))
@@ -34,8 +34,8 @@ let make = (_children) => {
             frame: state.frame + 1,
             timestamp: timestamp,
             delta,
-            keys: List.map(Input.stepKey(delta), state.keys),
-            game: Game.step(delta, state.keys, state.game)
+            keys: List.map(Input.updateKey(delta), state.keys),
+            data: Data.update(delta, state.keys, state.data)
           })
         }
       | InputKeyDown(keyName) => ReasonReact.Update({
@@ -67,6 +67,6 @@ let make = (_children) => {
   shouldUpdate: ({ oldSelf, newSelf }) => oldSelf.state.frame != newSelf.state.frame,
   render: (self) =>
     <div style=(ReactDOMRe.Style.make(~position="fixed", ~top="0", ~left="0", ~width="100vw", ~height="100vh", ()))>
-      <View data={self.state.game} />
+      <View data={self.state.data} />
     </div>
 };

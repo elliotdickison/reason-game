@@ -1,11 +1,11 @@
 let component = ReasonReact.statelessComponent("View");
 
-let make = (~data: Game.state, _children) => {
+let make = (~data: Data.state, _children) => {
   ...component,
   render: (_self) => {
-    let cameraRectangle = Game.getCameraRectangle(data.camera);
-    let ((viewportX, viewportY), _) = cameraRectangle;
-    let (viewportWidth, viewportHeight) = Rectangle.getDimensions(cameraRectangle);
+    let cameraBounds = Camera.getBounds(data.camera);
+    let ((viewportX, viewportY), _) = cameraBounds;
+    let (viewportWidth, viewportHeight) = Rectangle.getDimensions(cameraBounds);
     let viewBox = Printf.sprintf(
       "%f %f %f %f",
       viewportX,
@@ -14,7 +14,7 @@ let make = (~data: Game.state, _children) => {
       viewportHeight
     );
     let globalTransform = Printf.sprintf("translate(0, %f) scale(1, -1)", viewportHeight);
-    let missiles = List.map((missile: Game.missile) => {
+    let missiles = List.map((missile: Missile.missile) => {
       let ( positionX, positionY ) = missile.body.position;
       <circle
         cx=Printf.sprintf("%f", positionX)

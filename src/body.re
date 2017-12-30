@@ -6,7 +6,7 @@ type body = {
 };
 
 /* f == m * a == m * ((vi - vt) / dt) */
-let step = (delta: float, force: Vector.vector, body: body) => {
+let update = (delta: float, force: Vector.vector, body: body) => {
   let (pxInitial, pyInitial) = body.position;
   let (vxInitial, vyInitial) = body.velocity;
   let (fx, fy) = force;
@@ -21,7 +21,7 @@ let step = (delta: float, force: Vector.vector, body: body) => {
   }
 };
 
-let stepInBounds = (delta: float, force: Vector.vector, bounds: Rectangle.rectangle, body: body) => {
+let updateInBounds = (delta: float, force: Vector.vector, bounds: Rectangle.rectangle, body: body) => {
   let (fxInitial, fyInitial) = force;
   let (x, y) = body.position;
   let ((minX, minY), (maxX, maxY)) = bounds;
@@ -39,5 +39,5 @@ let stepInBounds = (delta: float, force: Vector.vector, bounds: Rectangle.rectan
   } else {
     fyInitial
   };
-  step(delta, (fxFinal, fyFinal), body)
+  update(delta, (fxFinal, fyFinal), body)
 }

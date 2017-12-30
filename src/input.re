@@ -15,7 +15,7 @@ let initial = {
   fire: false
 };
 
-let stepKey = (delta: float, key: key) => {
+let updateKey = (delta: float, key: key) => {
   let (name, duration) = key;
   (name, duration +. delta)
 };
@@ -27,7 +27,7 @@ let getKeyDuration = (keys: list(key), name: string) => {
   duration
 };
 
-let stepSteer = (keys: list(key)) => {
+let updateSteer = (keys: list(key)) => {
   let leftArrow = getKeyDuration(keys, "ArrowLeft");
   let rightArrow = getKeyDuration(keys, "ArrowRight");
   if (rightArrow >= 0.0 && (leftArrow == -1.0 || rightArrow < leftArrow)) {
@@ -39,7 +39,7 @@ let stepSteer = (keys: list(key)) => {
   }
 };
 
-let stepThrust = (keys: list(key)) => {
+let updateThrust = (keys: list(key)) => {
   let upArrow = getKeyDuration(keys, "ArrowUp");
   let downArrow = getKeyDuration(keys, "ArrowDown");
   if (upArrow >= 0.0 && (downArrow == -1.0 || upArrow < downArrow)) {
@@ -51,13 +51,13 @@ let stepThrust = (keys: list(key)) => {
   }
 };
 
-let stepFire = (keys: list(key)) => {
+let updateFire = (keys: list(key)) => {
   let space = getKeyDuration(keys, " ");
   space >= 0.0
 };
 
-let step = (keys: list(key), state: state) => {
-  steer: stepSteer(keys),
-  thrust: stepThrust(keys),
-  fire: stepFire(keys)
+let update = (keys: list(key), state: state) => {
+  steer: updateSteer(keys),
+  thrust: updateThrust(keys),
+  fire: updateFire(keys)
 }
