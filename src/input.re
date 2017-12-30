@@ -1,6 +1,7 @@
 type key = (string, float);
 
 type steer = Left | Right | Straight;
+
 type thrust = Forward | Neutral | Reverse;
 
 type state = {

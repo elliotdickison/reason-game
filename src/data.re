@@ -1,8 +1,8 @@
 type state = {
-  input : Input.state,
-  camera : Camera.camera,
-  ship : Ship.ship,
-  missiles : list(Missile.missile)
+  input: Input.state,
+  camera: Camera.camera,
+  ship: Ship.ship,
+  missiles: list(Missile.missile)
 };
 
 let initial = (cameraResolution: Vector.vector) => {
