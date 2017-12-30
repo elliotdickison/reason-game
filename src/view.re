@@ -3,17 +3,19 @@ let component = ReasonReact.statelessComponent("View");
 let make = (~data: Data.state, _children) => {
   ...component,
   render: (_self) => {
-    let cameraBounds = Camera.getBounds(data.camera);
-    let ((viewportX, viewportY), _) = cameraBounds;
-    let (viewportWidth, viewportHeight) = Rectangle.getDimensions(cameraBounds);
+    let ((viewBoxX, viewBoxY), (viewBoxWidth, viewBoxHeight)) = Camera.getViewBox(data.camera);
     let viewBox = Printf.sprintf(
       "%f %f %f %f",
-      viewportX,
-      -1.0 *. viewportY,
-      viewportWidth,
-      viewportHeight
+      viewBoxX,
+      -1.0 *. viewBoxY,
+      viewBoxWidth,
+      viewBoxHeight
     );
-    let globalTransform = Printf.sprintf("translate(0, %f) scale(1, -1)", viewportHeight);
+    let globalTransform = Printf.sprintf("translate(0, %f) scale(1, -1)", viewBoxHeight);
+    let terrain = List.map((terrain: Terrain.terrain) => {
+      let ((x, y), (width, height)) = terrain.bounds;
+      <rect fill="url(#bg)" width=Printf.sprintf("%f", width) height=Printf.sprintf("%f", height) x=Printf.sprintf("%f", x) y=Printf.sprintf("%f", y) stroke="none" />
+    }, data.terrain);
     let missiles = List.map((missile: Missile.missile) => {
       let ( positionX, positionY ) = missile.body.position;
       <circle
@@ -24,12 +26,12 @@ let make = (~data: Data.state, _children) => {
       />
     }, data.missiles);
     let (positionX, positionY) = data.ship.position;
-    <svg width=Printf.sprintf("%f", viewportWidth) height=Printf.sprintf("%f", viewportHeight) viewBox=viewBox>
+    <svg width=Printf.sprintf("%f", viewBoxWidth) height=Printf.sprintf("%f", viewBoxHeight) viewBox=viewBox>
       <g transform=globalTransform>
         <pattern id="bg" patternUnits="userSpaceOnUse" width="414" height="414">
           <image xlinkHref="https://i.pinimg.com/originals/14/9d/60/149d605137f5e8462bb8de252afc4254.jpg" x="0" y="0" width="414" height="414" />
         </pattern>
-        <rect fill="url(#bg)" width=Printf.sprintf("%f", viewportWidth) height=Printf.sprintf("%f", viewportHeight *. 100.0) y="-414" stroke="none" />
+        (ReasonReact.arrayToElement(Array.of_list(terrain)))
         <circle
           cx=Printf.sprintf("%f", positionX)
           cy=Printf.sprintf("%f", positionY)

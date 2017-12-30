@@ -1,10 +1,10 @@
 type ship = Body.body;
 
-let initial = (cameraResolution: Vector.vector): ship => {
+let initial = (viewBox: Rectangle.rectangle): ship => {
   mass: 110.0,
   drag: 0.04,
   velocity: (0.0, 0.0),
-  position: Vector.scale(0.5, cameraResolution)
+  position: Rectangle.getCenter(viewBox)
 };
 
 let update = (delta: float, input: Input.state, bounds: Rectangle.rectangle, ship: ship): ship => {

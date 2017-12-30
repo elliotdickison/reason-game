@@ -1,16 +1,16 @@
 type camera = {
-  resolution: Vector.vector,
+  dimensions: Vector.vector,
   focus: Vector.vector,
 };
 
-let initial = (cameraResolution: Vector.vector): camera => {
-  resolution: cameraResolution,
-  focus: Vector.scale(0.5, cameraResolution)
+let initial = (windowDimensions: Vector.vector): camera => {
+  dimensions: windowDimensions,
+  focus: Vector.scale(0.5, windowDimensions)
 };
 
-let getBounds = (camera: camera): Rectangle.rectangle => (
-  Vector.add(camera.focus, Vector.scale(-0.5, camera.resolution)),
-  Vector.add(camera.focus, Vector.scale(0.5, camera.resolution))
+let getViewBox = (camera: camera): Rectangle.rectangle => (
+  Vector.add(camera.focus, Vector.scale(-0.5, camera.dimensions)),
+  camera.dimensions
 );
 
 let update = (delta: float, camera: camera): camera => {

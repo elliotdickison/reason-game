@@ -1,21 +1,26 @@
 type rectangle = (Vector.vector, Vector.vector);
 
-let getDimensions = (r: rectangle) => {
-  let (bottomLeft, topRight) = r;
-  Vector.add(topRight, Vector.scale(-1.0, bottomLeft))
-};
-
 let shrink = (s: float, r: rectangle) => {
-  let (bottomLeft, topRight) = r;
+  let (anchor, dimensions) = r;
   let shrinkVector = (s, s);
   (
-    Vector.add(bottomLeft, shrinkVector),
-    Vector.add(topRight, Vector.scale(-1.0, shrinkVector))
+    Vector.add(anchor, shrinkVector),
+    Vector.add(dimensions, Vector.scale(-2.0, shrinkVector))
   )
+};
+
+let getBoundingPoints = (r: rectangle): (Vector.vector, Vector.vector) => {
+  let ((x, y), (width, height)) = r;
+  ((x, y), (x +. width, y +. height))
+};
+
+let getCenter = (r: rectangle): Vector.vector => {
+  let (bottomLeft, topRight) = getBoundingPoints(r);
+  Vector.scale(0.5, Vector.add(bottomLeft, topRight))
 };
 
 let containsPoint = (p: Vector.vector, r: rectangle) => {
   let (x, y) = p;
-  let ((minX, minY), (maxX, maxY)) = r;
+  let ((minX, minY), (maxX, maxY)) = getBoundingPoints(r);
   x >= minX && x <= maxX && y >= minY && y <= maxY
 };

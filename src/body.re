@@ -24,7 +24,7 @@ let update = (delta: float, force: Vector.vector, body: body) => {
 let updateInBounds = (delta: float, force: Vector.vector, bounds: Rectangle.rectangle, body: body) => {
   let (fxInitial, fyInitial) = force;
   let (x, y) = body.position;
-  let ((minX, minY), (maxX, maxY)) = bounds;
+  let ((minX, minY), (maxX, maxY)) = Rectangle.getBoundingPoints(bounds);
   let fxFinal = if (x < minX) {
     fxInitial +. (0.1 *. (minX -. x))
   } else if (x > maxX) {
