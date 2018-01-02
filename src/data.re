@@ -23,7 +23,7 @@ let update = (delta: float, keys: list(Input.key), state: state) => {
   let camera = Camera.update(delta, state.camera);
   let viewBox = Camera.getViewBox(state.camera);
   let ship = Ship.update(delta, input, viewBox, state.ship);
-  let missiles = Missile.updateList(delta, input, state.ship.position, viewBox, state.missiles);
+  let missiles = Missile.updateList(delta, input, Vector.add(state.ship.position, (0., 20.)), viewBox, state.missiles);
   let terrain = Terrain.updateList(delta, viewBox, state.terrain);
   {
     input,

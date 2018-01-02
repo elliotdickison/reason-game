@@ -1,8 +1,8 @@
 type rectangle = (Vector.vector, Vector.vector);
 
-let shrink = (s: float, r: rectangle) => {
+let shrink = (amount: float, r: rectangle) => {
   let (anchor, dimensions) = r;
-  let shrinkVector = (s, s);
+  let shrinkVector = (amount, amount);
   (
     Vector.add(anchor, shrinkVector),
     Vector.add(dimensions, Vector.scale(-2.0, shrinkVector))
@@ -23,4 +23,9 @@ let containsPoint = (p: Vector.vector, r: rectangle) => {
   let (x, y) = p;
   let ((minX, minY), (maxX, maxY)) = getBoundingPoints(r);
   x >= minX && x <= maxX && y >= minY && y <= maxY
+};
+
+let randomVector = (r: rectangle): Vector.vector => {
+  let ((x, y), (width, height)) = r;
+  (x +. Random.float(width), y +. Random.float(height))
 };
